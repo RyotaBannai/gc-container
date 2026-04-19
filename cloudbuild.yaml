@@ -60,8 +60,11 @@ steps:
     - 'projects/${PROJECT_ID}/locations/${_KEY_LOCATION}/keyRings/${_KEYRING}/cryptoKeys/${_KEY_NAME}/cryptoKeyVersions/${_KEY_VERSION}'
 
 - id: 'kubectl-apply'
-  name: 'grc.io/cloud-builders/kubectl'
+  name: 'gcr.io/cloud-builders/kubectl'
   args: ['apply', '-f', 'k8s-deploy.yaml']
 
 images:
   - '${_IMAGE_FULL_PATH}'
+
+options:
+  logging: CLOUD_LOGGING_ONLY
