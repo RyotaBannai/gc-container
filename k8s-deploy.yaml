@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: gc-container
-          image: asia-northeast1-docker.pkg.dev/singular-rope-268807/my-repo/my-go-app@sha256:45fde57b558f93cc7034d8ac39dfd50b282fce5f40d0a9a3d3c0327d6a3a7e45
+          image: asia-northeast1-docker.pkg.dev/singular-rope-268807/my-repo/my-go-app:good
           imagePullPolicy: Always
           env:
             - name: PORT

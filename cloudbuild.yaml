@@ -59,6 +59,12 @@ steps:
     - '--keyversion'
     - 'projects/${PROJECT_ID}/locations/${_KEY_LOCATION}/keyRings/${_KEYRING}/cryptoKeys/${_KEY_NAME}/cryptoKeyVersions/${_KEY_VERSION}'
 
+#GKE クラスタの接続情報を kubectl の kubeconfig に書き込む
+- id: 'gcloud container clusters get-credentials'
+  name: 'gcr.io/cloud-builders/gcloud'
+  args: ['container', 'clusters', 'get-credentials', 'test-gke-binauthz', '--zone', 'asia-northeast1-c', '--project', 'singular-rope-268807']
+
+#アプリを GKE にデプロイ
 - id: 'kubectl-apply'
   name: 'gcr.io/cloud-builders/kubectl'
   args: ['apply', '-f', 'k8s-deploy.yaml']
