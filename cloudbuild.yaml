@@ -1,5 +1,7 @@
 substitutions:
   _IMAGE_FULL_PATH: asia-northeast1-docker.pkg.dev/singular-rope-268807/my-repo/my-go-app
+  _GKE_CLUSTER: test-gke-binauthz
+  _GKE_LOCATION: asia-northeast1-c
   _ATTESTOR_ID: vulnz-attestor
   _KEY_LOCATION: global
   _KEYRING: binauthz-keys
@@ -59,15 +61,28 @@ steps:
     - '--keyversion'
     - 'projects/${PROJECT_ID}/locations/${_KEY_LOCATION}/keyRings/${_KEYRING}/cryptoKeys/${_KEY_NAME}/cryptoKeyVersions/${_KEY_VERSION}'
 
-#GKE クラスタの接続情報を kubectl の kubeconfig に書き込む
-- id: 'gcloud container clusters get-credentials'
-  name: 'gcr.io/cloud-builders/gcloud'
-  args: ['container', 'clusters', 'get-credentials', 'test-gke-binauthz', '--zone', 'asia-northeast1-c', '--project', 'singular-rope-268807']
+
+#OLD:アプリを GKE にデプロイ
+# - id: 'deploy-to-gke'
+#   name: 'gcr.io/cloud-builders/gcloud'
+#   entrypoint: 'bash'
+#   args:
+#     - '-c'
+#     - |
+#       gcloud container clusters get-credentials test-gke-binauthz \
+#         --zone asia-northeast1-c \
+#         --project singular-rope-268807
+#       kubectl apply -f k8s-deploy.yaml
 
 #アプリを GKE にデプロイ
-- id: 'kubectl-apply'
-  name: 'gcr.io/cloud-builders/kubectl'
-  args: ['apply', '-f', 'k8s-deploy.yaml']
+- id: 'gke-deploy'
+  name: 'gcr.io/cloud-builders/gke-deploy'
+  args:
+    - 'run'
+    - '--filename=k8s-deploy.yaml'
+    - '--image=${_IMAGE_FULL_PATH}:good'
+    - '--location=${_GKE_LOCATION}'
+    - '--cluster=${_GKE_CLUSTER}'
 
 images:
   - '${_IMAGE_FULL_PATH}'
