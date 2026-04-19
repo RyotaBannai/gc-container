@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gc-container
+  labels:
+    app: gc-container
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gc-container
+  template:
+    metadata:
+      labels:
+        app: gc-container
+    spec:
+      containers:
+        - name: gc-container
+          image: asia-northeast1-docker.pkg.dev/singular-rope-268807/my-repo/my-go-app@sha256:45fde57b558f93cc7034d8ac39dfd50b282fce5f40d0a9a3d3c0327d6a3a7e45
+          imagePullPolicy: Always
+          env:
+            - name: PORT
+              value: "8080"
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gc-container
+spec:
+  type: LoadBalancer
+  selector:
+    app: gc-container
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080

@@ -1,0 +1,13 @@
+{
+  'resource': 'projects/singular-rope-268807/notes/vulnz_note',
+  'policy': {
+    'bindings': [
+      {
+        'role': 'roles/containeranalysis.notes.occurrences.viewer',
+        'members': [
+          'serviceAccount:service-596644975495@gcp-sa-binaryauthorization.iam.gserviceaccount.com'
+        ]
+      }
+    ]
+  }
+}

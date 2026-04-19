@@ -1,0 +1,7 @@
+{
+  "attestation": {
+    "hint": {
+      "human_readable_name": "Container Vulnerabilities attestation authority"
+    }
+  }
+}
