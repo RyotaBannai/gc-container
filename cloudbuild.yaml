@@ -87,5 +87,5 @@ steps:
 images:
   - '${_IMAGE_FULL_PATH}'
 
-options:
-  logging: CLOUD_LOGGING_ONLY
+# options:
+#   logging: CLOUD_LOGGING_ONLY
